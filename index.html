@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Emission Calculator</title>
+</head>
+<body>
+    <h1>Carbon Emission Calculator</h1>
+    <form id="carbonEmissionForm">
+        <h2>Mine Characteristics</h2>
+        <label for="miningType">Type of Mining:</label>
+        <select id="miningType" name="miningType" required>
+          <option value="">Select...</option>
+          <option value="surface">Surface</option>
+          <option value="underground">Underground</option>
+          <option value="both">Both</option>
+        </select><br><br>
+      
+        <label for="coalType">Type of Coal Extracted:</label>
+        <select id="coalType" name="coalType" required>
+          <option value="">Select...</option>
+          <option value="anthracite">Anthracite</option>
+          <option value="bituminous">Bituminous</option>
+          <option value="subbituminous">Subbituminous</option>
+          <option value="lignite">Lignite</option>
+        </select><br><br>
+      
+        <label for="coalQuantity">Quantity of Coal Extracted (MT):</label>
+        <input type="number" id="coalQuantity" name="coalQuantity" required><br><br>
+      
+        <h2>Energy Consumption</h2>
+        <label for="electricity">Electricity Usage (kWh):</label>
+        <input type="number" id="electricity" name="electricity" required><br><br>
+      
+        <label for="diesel">Diesel Fuel Consumption (liters):</label>
+        <input type="number" id="diesel" name="diesel" required><br><br>
+      
+        <label for="otherFuel">Other Fuel Type and Amount:</label>
+        <input type="text" id="otherFuel" name="otherFuel"><br><br>
+      
+        <h2>Equipment</h2>
+        <label for="machineTypes">Types of Machines Used:</label>
+        <input type="text" id="machineTypes" name="machineTypes" required><br><br>
+      
+        <label for="operationalHours">Average Operational Hours per Machine:</label>
+        <input type="number" id="operationalHours" name="operationalHours" required><br><br>
+      
+        <h2>Methane Emissions</h2>
+        <label for="methaneContent">Coal Bed Methane Content (%):</label>
+        <input type="number" id="methaneContent" name="methaneContent" step="0.01" required><br><br>
+      
+        <label for="methaneCapture">Methane Capture System:</label>
+        <select id="methaneCapture" name="methaneCapture" required>
+          <option value="">Select...</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select><br><br>
+      
+        <h2>Transportation</h2>
+        <label for="transportMode">Mode of Transportation:</label>
+        <input type="text" id="transportMode" name="transportMode" required><br><br>
+      
+        <label for="transportDistance">Distance to End-Use Location (km):</label>
+        <input type="number" id="transportDistance" name="transportDistance" required><br><br>
+      
+        <label for="fuelEfficiency">Fuel Efficiency of Vehicles (km/L):</label>
+        <input type="number" id="fuelEfficiency" name="fuelEfficiency" step="0.1" required><br><br>
+      
+        <input type="submit" value="Calculate Carbon Emission">
+      </form>
+    <div id="result"></div>
+
+    <script>
+        // Add event listener to form submission
+        document.getElementById('carbon-emission-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Get input values
+            var machineType = document.getElementById('machine-type').value;
+            var coalType = document.getElementById('coal-type').value;
+            var machine = document.getElementById('machine').value;
+            var coalQuantity = document.getElementById('coal-quantity').value;
+            var location = document.getElementById('location').value;
+            var transportationMode = document.getElementById('transportation-mode').value;
+
+            // Calculate emissions (logic goes here)
+            var emissions = calculateEmissions(machineType, coalType, machine, coalQuantity, location, transportationMode);
+
+            // Display result
+            document.getElementById('result').innerHTML = 'Carbon Emissions: ' + emissions + ' tons';
+        });
+
+        // Calculate emissions function (logic goes here)
+        function calculateEmissions(machineType, coalType, machine, coalQuantity, location, transportationMode) {
+            // Your calculation logic goes here
+            // For now, return a dummy value
+            return 100;
+        }
+    </script>
+</body>
+</html>
