@@ -11,87 +11,148 @@
         <h2>Mine Characteristics</h2>
         <label for="miningType">Type of Mining:</label>
         <select id="miningType" name="miningType" required>
-          <option value="">Select...</option>
-          <option value="surface">Surface</option>
-          <option value="underground">Underground</option>
-          <option value="both">Both</option>
+            <option value="">Select...</option>
+            <option value="surface">Surface</option>
+            <option value="underground">Underground</option>
+            <option value="both">Both</option>
         </select><br><br>
-      
+
         <label for="coalType">Type of Coal Extracted:</label>
         <select id="coalType" name="coalType" required>
-          <option value="">Select...</option>
-          <option value="anthracite">Anthracite</option>
-          <option value="bituminous">Bituminous</option>
-          <option value="subbituminous">Subbituminous</option>
-          <option value="lignite">Lignite</option>
+            <option value="">Select...</option>
+            <option value="anthracite">Anthracite</option>
+            <option value="bituminous">Bituminous</option>
+            <option value="subbituminous">Subbituminous</option>
+            <option value="lignite">Lignite</option>
         </select><br><br>
-      
+
         <label for="coalQuantity">Quantity of Coal Extracted (MT):</label>
         <input type="number" id="coalQuantity" name="coalQuantity" required><br><br>
-      
+
         <h2>Energy Consumption</h2>
         <label for="electricity">Electricity Usage (kWh):</label>
         <input type="number" id="electricity" name="electricity" required><br><br>
-      
+
         <label for="diesel">Diesel Fuel Consumption (liters):</label>
         <input type="number" id="diesel" name="diesel" required><br><br>
-      
+
         <label for="otherFuel">Other Fuel Type and Amount:</label>
         <input type="text" id="otherFuel" name="otherFuel"><br><br>
-      
+
         <h2>Equipment</h2>
-        <label for="machineTypes">Types of Machines Used:</label>
-        <input type="text" id="machineTypes" name="machineTypes" required><br><br>
-      
-        <label for="operationalHours">Average Operational Hours per Machine:</label>
-        <input type="number" id="operationalHours" name="operationalHours" required><br><br>
-      
+        <div id="machineList">
+            <!-- Container for machine entries -->
+            <div class="machineEntry">
+                <label for="machineType">Machine Type:</label>
+                <select name="machineType[]" required>
+                    <option value="">Select machine type...</option>
+                    <option value="haul_truck">Haul Truck</option>
+                    <option value="shuttle_car">Shuttle Car</option>
+                    <option value="bulldozer">Bulldozer</option>
+                    <option value="frontend_loader">Frontend Loader</option>
+                    <option value="excavator">Excavator</option>
+                    <option value="drill_rig">Drill Rig</option>
+                    <option value="other">Other</option>
+                </select><br><br>
+        
+                <label for="machineCount">Number of Machines:</label>
+                <input type="number" name="machineCount[]" placeholder="Number of machines" min="1" required><br><br>
+        
+                <label for="operationalHours">Hours per Day:</label>
+                <input type="number" name="operationalHours[]" placeholder="Hours per day" min="0" max="24" step="0.5" required>
+            </div>
+        </div>
+        <button type="button" onclick="addMachine()">Add Another Machine</button>
         <h2>Methane Emissions</h2>
         <label for="methaneContent">Coal Bed Methane Content (%):</label>
         <input type="number" id="methaneContent" name="methaneContent" step="0.01" required><br><br>
-      
+
         <label for="methaneCapture">Methane Capture System:</label>
         <select id="methaneCapture" name="methaneCapture" required>
-          <option value="">Select...</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
+            <option value="">Select...</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
         </select><br><br>
-      
+
         <h2>Transportation</h2>
-        <label for="transportMode">Mode of Transportation:</label>
-        <input type="text" id="transportMode" name="transportMode" required><br><br>
-      
-        <label for="transportDistance">Distance to End-Use Location (km):</label>
-        <input type="number" id="transportDistance" name="transportDistance" required><br><br>
-      
-        <label for="fuelEfficiency">Fuel Efficiency of Vehicles (km/L):</label>
-        <input type="number" id="fuelEfficiency" name="fuelEfficiency" step="0.1" required><br><br>
-      
+        <div id="transportationList">
+            <div class="transportEntry">
+                <label for="transportMode">Transport Mode:</label>
+                <select name="transportMode[]" required>
+                    <option value="">Select transport mode...</option>
+                    <option value="truck">Truck</option>
+                    <option value="train">Train</option>
+                    <option value="barge">Barge</option>
+                    <option value="conveyor">Conveyor Belt</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="transportDistance">Distance (km):</label>
+                <input type="number" name="transportDistance[]" placeholder="Distance (km)" min="0" step="0.1" required>
+
+                <label for="fuelEfficiency">Fuel Efficiency (km/L or km/kWh):</label>
+                <input type="number" name="fuelEfficiency[]" placeholder="Fuel efficiency (km/L or km/kWh)" min="0" step="0.1" required>
+
+                <label for="fuelType">Fuel Type:</label>
+                <select name="fuelType[]" required>
+                    <option value="">Select fuel type...</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="gasoline">Gasoline</option>
+                    <option value="electric">Electric</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" onclick="addTransportation()">Add Another Transportation Method</button>
+
+        <br/>
+
         <input type="submit" value="Calculate Carbon Emission">
-      </form>
+    </form>
     <div id="result"></div>
 
     <script>
-        // Add event listener to form submission
-        document.getElementById('carbon-emission-form').addEventListener('submit', function(event) {
+        document.getElementById('carbonEmissionForm').addEventListener('submit', function(event) {
             event.preventDefault();
             // Get input values
-            var machineType = document.getElementById('machine-type').value;
-            var coalType = document.getElementById('coal-type').value;
-            var machine = document.getElementById('machine').value;
-            var coalQuantity = document.getElementById('coal-quantity').value;
-            var location = document.getElementById('location').value;
-            var transportationMode = document.getElementById('transportation-mode').value;
+            var machineTypes = Array.from(document.getElementsByName('machineType[]')).map(el => el.value);
+            var coalType = document.getElementById('coalType').value;
+            var coalQuantity = document.getElementById('coalQuantity').value;
+            var electricity = document.getElementById('electricity').value;
+            var diesel = document.getElementById('diesel').value;
+            var otherFuel = document.getElementById('otherFuel').value;
+            var methaneContent = document.getElementById('methaneContent').value;
+            var methaneCapture = document.getElementById('methaneCapture').value;
+            var transportModes = Array.from(document.getElementsByName('transportMode[]')).map(el => el.value);
+            var distances = Array.from(document.getElementsByName('transportDistance[]')).map(el => el.value);
+            var fuelEfficiencies = Array.from(document.getElementsByName('fuelEfficiency[]')).map(el => el.value);
+            var fuelTypes = Array.from(document.getElementsByName('fuelType[]')).map(el => el.value);
 
             // Calculate emissions (logic goes here)
-            var emissions = calculateEmissions(machineType, coalType, machine, coalQuantity, location, transportationMode);
+            var emissions = calculateEmissions(machineTypes, coalType, coalQuantity, electricity, diesel, otherFuel, methaneContent, methaneCapture, transportModes, distances, fuelEfficiencies, fuelTypes);
 
             // Display result
             document.getElementById('result').innerHTML = 'Carbon Emissions: ' + emissions + ' tons';
         });
 
-        // Calculate emissions function (logic goes here)
-        function calculateEmissions(machineType, coalType, machine, coalQuantity, location, transportationMode) {
+        function addTransportation() {
+            var transportList = document.getElementById('transportationList');
+            var newTransport = transportList.children[0].cloneNode(true);
+            newTransport.querySelectorAll('input').forEach(input => input.value = '');
+            newTransport.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            transportList.appendChild(newTransport);
+        }
+
+        function addMachine() {
+        var machineList = document.getElementById('machineList');
+        var newMachine = machineList.children[0].cloneNode(true);
+        // Clear input values and reset select options
+        newMachine.querySelectorAll('input').forEach(input => input.value = '');
+        newMachine.querySelector('select').selectedIndex = 0;
+        machineList.appendChild(newMachine);
+    }
+
+        function calculateEmissions(machineTypes, coalType, coalQuantity, electricity, diesel, otherFuel, methaneContent, methaneCapture, transportModes, distances, fuelEfficiencies, fuelTypes) {
             // Your calculation logic goes here
             // For now, return a dummy value
             return 100;
