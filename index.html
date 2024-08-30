@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
     <title>Carbon Emission Calculator</title>
   </head>
   <body>
@@ -94,6 +95,20 @@
             step="0.5"
             required
           />
+          <br /><br />
+          <label for="fuelEfficiency">Fuel Efficiency (km/L or km/kWh):</label>
+          <input
+            type="number"
+            name="fuelEfficiency[]"
+            placeholder="Fuel efficiency (km/L or km/kWh)"
+            min="0"
+            step="0.1"
+            required
+          />
+          <br /><br />
+          <label for="fuelConsumption_1">Fuel/Electricity Consumption per Day:</label>
+              <input type="number" id="fuelConsumption_1" name="fuelConsumption[]" min="0" step="0.01" required />
+          <br /><br />
         </div>
       </div>
       <button type="button" onclick="addMachine()">Add Another Machine</button>
@@ -126,6 +141,7 @@
             <option value="conveyor">Conveyor Belt</option>
             <option value="other">Other</option>
           </select>
+          <br /><br />
 
           <label for="transportDistance">Distance (km):</label>
           <input
@@ -136,6 +152,7 @@
             step="0.1"
             required
           />
+          <br /><br />
 
           <label for="fuelEfficiency">Fuel Efficiency (km/L or km/kWh):</label>
           <input
@@ -146,6 +163,7 @@
             step="0.1"
             required
           />
+          <br /><br />
 
           <label for="fuelType">Fuel Type:</label>
           <select name="fuelType[]" required>
@@ -157,224 +175,14 @@
           </select>
         </div>
       </div>
+      <br />
       <button type="button" onclick="addTransportation()">
         Add Another Transportation Method
       </button>
-
-      <br />
-
+      <br /><br />
       <input type="submit" value="Calculate Carbon Emission" />
     </form>
-    <div id="result"></div>
-
-    <!-- <script>
-      document
-        .getElementById("carbonEmissionForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          // Get input values
-          var machineTypes = Array.from(
-            document.getElementsByName("machineType[]")
-          ).map((el) => el.value);
-          var coalType = document.getElementById("coalType").value;
-          var coalQuantity = document.getElementById("coalQuantity").value;
-          var electricity = document.getElementById("electricity").value;
-          var diesel = document.getElementById("diesel").value;
-          var otherFuel = document.getElementById("otherFuel").value;
-          var methaneContent = document.getElementById("methaneContent").value;
-          var methaneCapture = document.getElementById("methaneCapture").value;
-          var transportModes = Array.from(
-            document.getElementsByName("transportMode[]")
-          ).map((el) => el.value);
-          var distances = Array.from(
-            document.getElementsByName("transportDistance[]")
-          ).map((el) => el.value);
-          var fuelEfficiencies = Array.from(
-            document.getElementsByName("fuelEfficiency[]")
-          ).map((el) => el.value);
-          var fuelTypes = Array.from(
-            document.getElementsByName("fuelType[]")
-          ).map((el) => el.value);
-
-          // Calculate emissions (logic goes here)
-          var emissions = calculateEmissions(
-            machineTypes,
-            coalType,
-            coalQuantity,
-            electricity,
-            diesel,
-            otherFuel,
-            methaneContent,
-            methaneCapture,
-            transportModes,
-            distances,
-            fuelEfficiencies,
-            fuelTypes
-          );
-
-          // Display result
-          document.getElementById("result").innerHTML =
-            "Carbon Emissions: " + emissions + " tons";
-        });
-
-      var perCapitaEmissions = totalEmissions / numPeople;
-
-      // Display results
-      document.getElementById("result").innerHTML = `
-        Total Carbon Emissions: ${totalEmissions.toFixed(2)} tons<br>
-        Per Capita Emissions: ${perCapitaEmissions.toFixed(2)} tons
-    `;
-
-      function addTransportation() {
-        var transportList = document.getElementById("transportationList");
-        var newTransport = transportList.children[0].cloneNode(true);
-        newTransport
-          .querySelectorAll("input")
-          .forEach((input) => (input.value = ""));
-        newTransport
-          .querySelectorAll("select")
-          .forEach((select) => (select.selectedIndex = 0));
-        transportList.appendChild(newTransport);
-      }
-
-      function addMachine() {
-        var machineList = document.getElementById("machineList");
-        var newMachine = machineList.children[0].cloneNode(true);
-        // Clear input values and reset select options
-        newMachine
-          .querySelectorAll("input")
-          .forEach((input) => (input.value = ""));
-        newMachine.querySelector("select").selectedIndex = 0;
-        machineList.appendChild(newMachine);
-      }
-
-      function calculateEmissions(
-        machineTypes,
-        coalType,
-        coalQuantity,
-        electricity,
-        diesel,
-        otherFuel,
-        methaneContent,
-        methaneCapture,
-        transportModes,
-        distances,
-        fuelEfficiencies,
-        fuelTypes
-      ) {
-        // Your calculation logic goes here
-        // For now, return a dummy value
-        return 100;
-      }
-    </script> -->
-  <script>
-    function calculateEmissions(
-  machineTypes,
-  coalType,
-  coalQuantity,
-  electricity,
-  diesel,
-  otherFuel,
-  methaneContent,
-  methaneCapture,
-  transportModes,
-  distances,
-  fuelEfficiencies,
-  fuelTypes
-) {
-  let totalEmissions = 0;
-
-  // Coal extraction emissions
-  const coalEmissionFactors = {
-    anthracite: 2.62,
-    bituminous: 2.46,
-    subbituminous: 1.98,
-    lignite: 1.36
-  };
-  totalEmissions += coalQuantity * coalEmissionFactors[coalType];
-
-  // Electricity emissions (assuming average grid emissions of 0.5 kg CO2e/kWh)
-  totalEmissions += electricity * 0.0005;
-
-  // Diesel emissions (2.68 kg CO2e/liter)
-  totalEmissions += diesel * 0.00268;
-
-  // Methane emissions
-  let methaneEmissions = coalQuantity * (methaneContent / 100) * 25; // GWP of methane is 25
-  if (methaneCapture === 'yes') {
-    methaneEmissions *= 0.2; // Assume 80% capture rate
-  }
-  totalEmissions += methaneEmissions;
-
-  // Transportation emissions
-  for (let i = 0; i < transportModes.length; i++) {
-    let transportEmissions = 0;
-    const distance = parseFloat(distances[i]);
-    const efficiency = parseFloat(fuelEfficiencies[i]);
-
-    if (fuelTypes[i] === 'diesel') {
-      transportEmissions = (distance / efficiency) * 0.00268; // 2.68 kg CO2e/liter
-    } else if (fuelTypes[i] === 'gasoline') {
-      transportEmissions = (distance / efficiency) * 0.00233; // 2.33 kg CO2e/liter
-    } else if (fuelTypes[i] === 'electric') {
-      transportEmissions = (distance / efficiency) * 0.0005; // 0.5 kg CO2e/kWh
-    }
-
-    totalEmissions += transportEmissions;
-  }
-
-  // Machine emissions (simplified, assuming diesel usage)
-  machineTypes.forEach((machine, index) => {
-    const count = parseInt(document.getElementsByName('machineCount[]')[index].value);
-    const hours = parseFloat(document.getElementsByName('operationalHours[]')[index].value);
-    const fuelConsumption = 15; // Assume 15 L/hour for simplicity
-    totalEmissions += count * hours * fuelConsumption * 0.00268 * 365; // Assuming year-round operation
-  });
-
-  return totalEmissions;
-}
-
-document.getElementById("carbonEmissionForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-  // Get input values
-  var machineTypes = Array.from(document.getElementsByName("machineType[]")).map((el) => el.value);
-  var coalType = document.getElementById("coalType").value;
-  var coalQuantity = parseFloat(document.getElementById("coalQuantity").value);
-  var electricity = parseFloat(document.getElementById("electricity").value);
-  var diesel = parseFloat(document.getElementById("diesel").value);
-  var otherFuel = document.getElementById("otherFuel").value;
-  var methaneContent = parseFloat(document.getElementById("methaneContent").value);
-  var methaneCapture = document.getElementById("methaneCapture").value;
-  var transportModes = Array.from(document.getElementsByName("transportMode[]")).map((el) => el.value);
-  var distances = Array.from(document.getElementsByName("transportDistance[]")).map((el) => el.value);
-  var fuelEfficiencies = Array.from(document.getElementsByName("fuelEfficiency[]")).map((el) => el.value);
-  var fuelTypes = Array.from(document.getElementsByName("fuelType[]")).map((el) => el.value);
-  var numPeople = parseInt(document.getElementById("numPeople").value);
-
-  // Calculate emissions
-  var totalEmissions = calculateEmissions(
-    machineTypes,
-    coalType,
-    coalQuantity,
-    electricity,
-    diesel,
-    otherFuel,
-    methaneContent,
-    methaneCapture,
-    transportModes,
-    distances,
-    fuelEfficiencies,
-    fuelTypes
-  );
-
-  var perCapitaEmissions = totalEmissions / numPeople;
-
-  // Display results
-  document.getElementById("result").innerHTML = `
-    Total Carbon Emissions: ${totalEmissions.toFixed(2)} tons CO2e<br>
-    Per Capita Emissions: ${perCapitaEmissions.toFixed(2)} tons CO2e per person
-  `;
-});
-  </script>
+    <div id="result"></div> 
+    <script src = "script.js"></script>
 </body>
 </html>
